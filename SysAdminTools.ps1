@@ -1,14 +1,19 @@
 
 Do
 {
-$PromptUser = Read-Host -Prompt ' 
+$PromptUser = Read-Host -Prompt '
+--------------------------------------------------------------------------------------------------
+
 Choose A/Another Selection :
 1. Get Ram Info
 2. Check HD/SSD 
 3. Check Battery With Detailed Report On WebPage
 4. Full Details On Network Adapters
-5. Test Connection 
-6. Exit
+5. Test Connection Remotely
+6. Check Serial Number 
+7. Exit
+
+-------------------------------------------------------------------------------------------------
 '
 ## For Checking Basic Ram Info
 If($PromptUser -eq 1){
@@ -65,29 +70,38 @@ ElseIf($PromptUser -eq 3){
 powercfg /batteryreport
 #ii C:\WINDOWS\system32\battery-report.html
 Start-Process 'C:\WINDOWS\system32\battery-report.html'
+write host " Report has been Generated , Please Check your Browser"
+
 }
 ## For Network Troubleshooting 
 ElseIf($PromptUser -eq 4){
 
 $network=Get-NetIPConfiguration
-write  $network
+$network
 }
 
 ElseIf($PromptUser -eq 5){
+write-host "`n"
 
-$testCon=Test-NetConnection
-write $testCon
+$UserInput = Read-Host -Prompt ' Please enter the IP Address/Website(without https) you want to ping  '
 
+Test-NetConnection -ComputerName $UserInput
+   
 }
 
-ElseIf($PromptUser -gt 6  -Or $PromptUser -ne [int]){
+
+ElseIf($PromptUser -eq 6 ){
+ systeminfo
+ gwmi win32_bios
+}
+
+ElseIf($PromptUser -gt 7  -Or $PromptUser -ne [int]){
  Write-Host " Invalid input was made Was Made ......., Now Exiting "
  break
 }
 
+
 Else{
 }
 
-}while($PromptUser -ne 6)
-
-
+}while($PromptUser -ne 7)
