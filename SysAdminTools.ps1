@@ -432,7 +432,7 @@ Restart-Computer
 }
 
 ElseIf($PromptUser -eq 9){
-$domain="intra.rakuten.co.jp"
+$domain=Read-Host -Prompt 'Enter the domain'| ConvertTo-SecureString -asPlainText -Force
 Write-Host ' Now Joining'......... $domain
 $password= Read-Host -Prompt 'Enter the password for the domain' | ConvertTo-SecureString -asPlainText -Force
 $username="$domain\ls-chris"
