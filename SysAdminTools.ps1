@@ -12,8 +12,9 @@ Choose A/Another Selection :
 5. Test Connection Remotely
 6. Check Serial Number 
 7. System-Health Report ( Cred. Gregory Van Den Hem)
-8. Download Choco(Choco is a library allowing for fast-easy download to any application)
-9. Exit
+8. Change Computer Name (Step 1 for AD Join)
+9. AD Join(Computer name is assigned , if not change computer name first)
+10. Exit
 
 -------------------------------------------------------------------------------------------------
 '
@@ -422,22 +423,31 @@ Get-WmiObject -Class Win32_NetworkAdapterConfiguration -Filter IPEnabled=TRUE -C
 }
 ElseIf($PromptUser -eq 8){
 
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+$GetName=Read-Host -Prompt ' Enter the computer name you want to add to Active Directory, then after restart run Step 9 '
+Rename-Computer -NewName $GetName
+$OSWMI=Get-WmiObject -class Win32_OperatingSystem
+$OSWMI.Description=$GetName
+$OSWMI.put()
+-RestartComputer
+}
 
-
+ElseIf($PromptUser -eq 9){
+$domain="intra.rakuten.co.jp"
+Write-Host ' Now Joining'......... $domain
+$password= Read-Host -Prompt 'Enter the password for the domain' | ConvertTo-SecureString -asPlainText -Force
+$username="$domain\ls-chris"
+$creds=New-Object System.Management.Automation.PSCredential($username,$password)
+Add-Computer -DomainName $domain -Credential $creds -restart -force -verbose
 }
 
 
-ElseIf($PromptUser -gt 10  -Or $PromptUser -ne [int]){
- Write-Host " Invalid input was made Was Made ......., Now Exiting "
+ElseIf($PromptUser -ge 10  -Or $PromptUser -ne [int]){
+ Write-Host " Exiting or Invalid input was made Was Made ......., Now Exiting "
  break
 }
 
 
 
-Else{
- Write-Host " Exiting  " 
- break
-}
 
 }while($PromptUser)
+
