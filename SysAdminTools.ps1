@@ -435,7 +435,8 @@ ElseIf($PromptUser -eq 9){
 $domain=Read-Host -Prompt 'Enter the domain'| ConvertTo-SecureString -asPlainText -Force
 Write-Host ' Now Joining'......... $domain
 $password= Read-Host -Prompt 'Enter the password for the domain' | ConvertTo-SecureString -asPlainText -Force
-$username="$domain\ls-chris"
+$userInput=Read-Host -Prompt 'Enter the username of the administrator who has priviledges to join useres to AD'
+$username= "$domain\userInput"
 $creds=New-Object System.Management.Automation.PSCredential($username,$password)
 Add-Computer -DomainName $domain -Credential $creds -restart -force -verbose
 }
