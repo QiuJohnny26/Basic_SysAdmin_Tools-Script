@@ -428,7 +428,7 @@ Rename-Computer -NewName $GetName
 $OSWMI=Get-WmiObject -class Win32_OperatingSystem
 $OSWMI.Description=$GetName
 $OSWMI.put()
--RestartComputer
+Restart-Computer
 }
 
 ElseIf($PromptUser -eq 9){
